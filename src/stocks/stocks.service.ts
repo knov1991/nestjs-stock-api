@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { readFile } from 'fs/promises';
 import { Repository } from 'typeorm';
 import { CreateStockDto } from './dto/create-stock.dto';
-import { UpdateStockDto } from './dto/update-stock.dto';
 import { Stock } from './entities/stock.entity';
 
 @Injectable()
