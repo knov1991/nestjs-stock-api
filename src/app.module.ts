@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { StocksModule } from './stocks/stocks.module';
 
 @Module({
-  imports: [StocksModule],
+  imports: [TypeOrmModule.forRoot(), StocksModule],
   controllers: [],
   providers: [],
 })

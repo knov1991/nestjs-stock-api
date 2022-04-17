@@ -1,3 +1,21 @@
-### LerStocks
-GET http://localhost:3000/stocks/MGLU3/2011
+### LerStocksCsv>DB - stock/ano
+GET http://localhost:3000/stocks/MGLU3/2019
+Content-Type: application/json
+
+### LerStocksCsv>DB - stock/ano
+GET http://localhost:3000/stocks/PETR4/2001
+Content-Type: application/json
+
+### LerStocksCsv>DB - stock/ano
+GET http://localhost:3000/stocks/VALE3/2005
+Content-Type: application/json
+
+
+
+### Stock DB Info - stock/ano
+GET http://localhost:3000/stocks/db/MGLU3/2011
+Content-Type: application/json
+
+### Stock DB Info - All
+GET http://localhost:3000/stocks/db/all
 Content-Type: application/json

@@ -1,28 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { readFile } from 'fs/promises';
+import { Repository } from 'typeorm';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
+import { Stock } from './entities/stock.entity';
 
 @Injectable()
 export class StocksService {
+  constructor(
+    @InjectRepository(Stock)
+    private readonly stockRepository: Repository<Stock>,
+  ) {}
+
   create(createStockDto: CreateStockDto) {
-    return 'This action adds a new stock';
+    const newStock = this.stockRepository.create(createStockDto);
+    return this.stockRepository.save(newStock);
   }
 
-  findAll() {
-    return `This action returns all stocks`;
+  findByStockAno(params) {
+    return this.stockRepository.findBy({
+      stock: params.stock,
+      ano: params.ano,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stock`;
-  }
-
-  update(id: number, updateStockDto: UpdateStockDto) {
-    return `This action updates a #${id} stock`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} stock`;
+  async findAll(): Promise<Stock[]> {
+    return this.stockRepository.find();
   }
 
   async getCsv(params) {
@@ -51,6 +55,7 @@ export class StocksService {
       if (ano == params.ano) {
         for (const i of numMes) {
           if (i == mes) {
+            console.log(infoOpen);
             if (open_price[i - 1] == 0) {
               open_price[i - 1] = infoOpen;
             }
@@ -64,6 +69,43 @@ export class StocksService {
             close_price[i - 1] = infoClose;
           }
         }
+      }
+    }
+
+    // Cria entrada no DB
+    const nomeMes = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+    for (const i of numMes) {
+      if (
+        open_price[i - 1] != 0 ||
+        highest_price[i - 1] != 0 ||
+        lowest_price[i - 1] != 0 ||
+        volume[i - 1] != 0 ||
+        close_price[i - 1] != 0
+      ) {
+        const newStock = this.stockRepository.create({
+          stock: params.arquivo,
+          ano: params.ano,
+          mes: nomeMes[i - 1],
+          open_price: open_price[i - 1],
+          highest_price: highest_price[i - 1],
+          lowest_price: lowest_price[i - 1],
+          volume: volume[i - 1],
+          close_price: close_price[i - 1],
+        });
+        await this.stockRepository.save(newStock);
       }
     }
 
