@@ -1,0 +1,3 @@
+### LerStocks
+GET http://localhost:3000/MGLU3/2011
+Content-Type: application/json
